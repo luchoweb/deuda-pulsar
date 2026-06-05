@@ -107,7 +107,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 								<h2 class="section-title">Cuotas mensuales</h2>
 							</div>
 							<p class="section-copy mb-0" id="monthly-caption">
-								Haz clic para ver la lista.
+								Cronograma mensual.
 							</p>
 						</summary>
 						<div class="collapsible-content mt-4">
@@ -122,7 +122,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 								<div class="section-kicker">Pago flexible</div>
 								<h2 class="section-title">Cuota extraordinaria</h2>
 							</div>
-							<p class="section-copy mb-0">Haz clic para ver la lista.</p>
+							<p class="section-copy mb-0">Detalle de cuota flexible.</p>
 						</summary>
 						<div class="collapsible-content mt-4">
 							<div id="special-installment"></div>
@@ -165,6 +165,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			const salePrice = document.querySelector('#sale-price');
 			const balanceHighlight = document.querySelector('#balance-highlight');
 			const lastSync = document.querySelector('#last-sync');
+			let currentInstallments = [];
 
 			function setText(element, value) {
 				if (element) {
@@ -910,4 +911,3 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 		</style>
 	</body>
 </html>
-			let currentInstallments = [];
