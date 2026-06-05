@@ -19,7 +19,7 @@ Cada cuota tiene un arreglo `payments`. Para registrar un pago manual agrega obj
 
 ```json
 {
-  "date": "2026-07-05",
+  "date": "2026-06-20",
   "amount": 200000,
   "note": "Transferencia Bancolombia"
 }

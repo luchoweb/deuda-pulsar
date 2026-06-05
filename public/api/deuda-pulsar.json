@@ -5,8 +5,8 @@
     "currency": "COP",
     "salePrice": 7200000,
     "debtor": "Deiner Cuitiva",
-    "scheduleStartsOnDay": 5,
-    "scheduleStartMonth": "2026-07",
+    "scheduleStartsOnDay": 20,
+    "scheduleStartMonth": "2026-06",
     "monthlyInstallmentAmount": 200000,
     "monthlyInstallmentCount": 30,
     "specialInstallmentAmount": 1200000,
@@ -20,7 +20,7 @@
       "label": "Cuota 1",
       "sequence": 1,
       "amount": 200000,
-      "dueDate": "2026-07-05",
+      "dueDate": "2026-06-20",
       "note": "",
       "payments": []
     },
@@ -30,7 +30,7 @@
       "label": "Cuota 2",
       "sequence": 2,
       "amount": 200000,
-      "dueDate": "2026-08-05",
+      "dueDate": "2026-07-20",
       "note": "",
       "payments": []
     },
@@ -40,7 +40,7 @@
       "label": "Cuota 3",
       "sequence": 3,
       "amount": 200000,
-      "dueDate": "2026-09-05",
+      "dueDate": "2026-08-20",
       "note": "",
       "payments": []
     },
@@ -50,7 +50,7 @@
       "label": "Cuota 4",
       "sequence": 4,
       "amount": 200000,
-      "dueDate": "2026-10-05",
+      "dueDate": "2026-09-20",
       "note": "",
       "payments": []
     },
@@ -60,7 +60,7 @@
       "label": "Cuota 5",
       "sequence": 5,
       "amount": 200000,
-      "dueDate": "2026-11-05",
+      "dueDate": "2026-10-20",
       "note": "",
       "payments": []
     },
@@ -70,7 +70,7 @@
       "label": "Cuota 6",
       "sequence": 6,
       "amount": 200000,
-      "dueDate": "2026-12-05",
+      "dueDate": "2026-11-20",
       "note": "",
       "payments": []
     },
@@ -80,7 +80,7 @@
       "label": "Cuota 7",
       "sequence": 7,
       "amount": 200000,
-      "dueDate": "2027-01-05",
+      "dueDate": "2026-12-20",
       "note": "",
       "payments": []
     },
@@ -90,7 +90,7 @@
       "label": "Cuota 8",
       "sequence": 8,
       "amount": 200000,
-      "dueDate": "2027-02-05",
+      "dueDate": "2027-01-20",
       "note": "",
       "payments": []
     },
@@ -100,7 +100,7 @@
       "label": "Cuota 9",
       "sequence": 9,
       "amount": 200000,
-      "dueDate": "2027-03-05",
+      "dueDate": "2027-02-20",
       "note": "",
       "payments": []
     },
@@ -110,7 +110,7 @@
       "label": "Cuota 10",
       "sequence": 10,
       "amount": 200000,
-      "dueDate": "2027-04-05",
+      "dueDate": "2027-03-20",
       "note": "",
       "payments": []
     },
@@ -120,7 +120,7 @@
       "label": "Cuota 11",
       "sequence": 11,
       "amount": 200000,
-      "dueDate": "2027-05-05",
+      "dueDate": "2027-04-20",
       "note": "",
       "payments": []
     },
@@ -130,7 +130,7 @@
       "label": "Cuota 12",
       "sequence": 12,
       "amount": 200000,
-      "dueDate": "2027-06-05",
+      "dueDate": "2027-05-20",
       "note": "",
       "payments": []
     },
@@ -140,7 +140,7 @@
       "label": "Cuota 13",
       "sequence": 13,
       "amount": 200000,
-      "dueDate": "2027-07-05",
+      "dueDate": "2027-06-20",
       "note": "",
       "payments": []
     },
@@ -150,7 +150,7 @@
       "label": "Cuota 14",
       "sequence": 14,
       "amount": 200000,
-      "dueDate": "2027-08-05",
+      "dueDate": "2027-07-20",
       "note": "",
       "payments": []
     },
@@ -160,7 +160,7 @@
       "label": "Cuota 15",
       "sequence": 15,
       "amount": 200000,
-      "dueDate": "2027-09-05",
+      "dueDate": "2027-08-20",
       "note": "",
       "payments": []
     },
@@ -170,7 +170,7 @@
       "label": "Cuota 16",
       "sequence": 16,
       "amount": 200000,
-      "dueDate": "2027-10-05",
+      "dueDate": "2027-09-20",
       "note": "",
       "payments": []
     },
@@ -180,7 +180,7 @@
       "label": "Cuota 17",
       "sequence": 17,
       "amount": 200000,
-      "dueDate": "2027-11-05",
+      "dueDate": "2027-10-20",
       "note": "",
       "payments": []
     },
@@ -190,7 +190,7 @@
       "label": "Cuota 18",
       "sequence": 18,
       "amount": 200000,
-      "dueDate": "2027-12-05",
+      "dueDate": "2027-11-20",
       "note": "",
       "payments": []
     },
@@ -200,7 +200,7 @@
       "label": "Cuota 19",
       "sequence": 19,
       "amount": 200000,
-      "dueDate": "2028-01-05",
+      "dueDate": "2027-12-20",
       "note": "",
       "payments": []
     },
@@ -210,7 +210,7 @@
       "label": "Cuota 20",
       "sequence": 20,
       "amount": 200000,
-      "dueDate": "2028-02-05",
+      "dueDate": "2028-01-20",
       "note": "",
       "payments": []
     },
@@ -220,7 +220,7 @@
       "label": "Cuota 21",
       "sequence": 21,
       "amount": 200000,
-      "dueDate": "2028-03-05",
+      "dueDate": "2028-02-20",
       "note": "",
       "payments": []
     },
@@ -230,7 +230,7 @@
       "label": "Cuota 22",
       "sequence": 22,
       "amount": 200000,
-      "dueDate": "2028-04-05",
+      "dueDate": "2028-03-20",
       "note": "",
       "payments": []
     },
@@ -240,7 +240,7 @@
       "label": "Cuota 23",
       "sequence": 23,
       "amount": 200000,
-      "dueDate": "2028-05-05",
+      "dueDate": "2028-04-20",
       "note": "",
       "payments": []
     },
@@ -250,7 +250,7 @@
       "label": "Cuota 24",
       "sequence": 24,
       "amount": 200000,
-      "dueDate": "2028-06-05",
+      "dueDate": "2028-05-20",
       "note": "",
       "payments": []
     },
@@ -260,7 +260,7 @@
       "label": "Cuota 25",
       "sequence": 25,
       "amount": 200000,
-      "dueDate": "2028-07-05",
+      "dueDate": "2028-06-20",
       "note": "",
       "payments": []
     },
@@ -270,7 +270,7 @@
       "label": "Cuota 26",
       "sequence": 26,
       "amount": 200000,
-      "dueDate": "2028-08-05",
+      "dueDate": "2028-07-20",
       "note": "",
       "payments": []
     },
@@ -280,7 +280,7 @@
       "label": "Cuota 27",
       "sequence": 27,
       "amount": 200000,
-      "dueDate": "2028-09-05",
+      "dueDate": "2028-08-20",
       "note": "",
       "payments": []
     },
@@ -290,7 +290,7 @@
       "label": "Cuota 28",
       "sequence": 28,
       "amount": 200000,
-      "dueDate": "2028-10-05",
+      "dueDate": "2028-09-20",
       "note": "",
       "payments": []
     },
@@ -300,7 +300,7 @@
       "label": "Cuota 29",
       "sequence": 29,
       "amount": 200000,
-      "dueDate": "2028-11-05",
+      "dueDate": "2028-10-20",
       "note": "",
       "payments": []
     },
@@ -310,7 +310,7 @@
       "label": "Cuota 30",
       "sequence": 30,
       "amount": 200000,
-      "dueDate": "2028-12-05",
+      "dueDate": "2028-11-20",
       "note": "Ultima cuota mensual del plan numerado.",
       "payments": []
     },
