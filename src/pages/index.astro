@@ -1,0 +1,848 @@
+---
+const pageTitle = 'Deuda Pulsar';
+const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={pageDescription} />
+		<title>{pageTitle}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+		/>
+	</head>
+	<body>
+		<div class="ambient ambient-a"></div>
+		<div class="ambient ambient-b"></div>
+		<div class="ambient ambient-c"></div>
+
+		<main class="page-shell container-xxl py-4 py-lg-5">
+			<section class="glass-panel hero-panel p-4 p-lg-5 mb-4 mb-lg-5">
+				<div class="row g-4 align-items-center">
+					<div class="col-12 col-xl-7">
+						<div class="eyebrow">Control privado de cobranza</div>
+						<h1 class="hero-title">Pulsar NS 125 UG</h1>
+						<p class="hero-copy">
+							Panel para registrar pagos manuales,
+							vigilar el saldo y revisar el estado de cada cuota desde cualquier dispositivo.
+						</p>
+						<div class="hero-tags">
+							<span class="hero-tag"><i class="bi bi-calendar-event"></i> Inicio mensual: 05 de julio de 2026</span>
+							<span class="hero-tag"><i class="bi bi-cash-stack"></i> 30 cuotas de $200.000</span>
+							<span class="hero-tag"><i class="bi bi-stars"></i> Cuota extra: $1.200.000</span>
+						</div>
+					</div>
+					<div class="col-12 col-xl-5">
+						<div class="glass-inner progress-shell p-4">
+							<div class="progress-ring" id="progress-ring" style="--progress: 0deg;">
+								<div>
+									<div class="progress-caption">Recaudo</div>
+									<div class="progress-value" id="progress-value">0%</div>
+								</div>
+							</div>
+							<div class="progress-meta">
+								<div>
+									<span>Total del negocio</span>
+									<strong id="sale-price">$7.200.000</strong>
+								</div>
+								<div>
+									<span>Saldo visible</span>
+									<strong id="balance-highlight">Cargando...</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="row g-4 mb-4 mb-lg-5" id="summary-cards">
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="glass-panel metric-card p-4 h-100 skeleton-card"></div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="glass-panel metric-card p-4 h-100 skeleton-card"></div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="glass-panel metric-card p-4 h-100 skeleton-card"></div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="glass-panel metric-card p-4 h-100 skeleton-card"></div>
+				</div>
+			</section>
+
+			<section class="glass-panel p-4 p-lg-5 mb-4 mb-lg-5">
+				<div class="section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+					<p class="section-copy mb-0">
+						Cada ficha representa una cuota mensual numerada. El sistema marca si una cuota ya fue pagada,
+						sigue pendiente, quedó parcial o ya está vencida.
+					</p>
+				</div>
+				<div class="timeline-strip" id="timeline-strip"></div>
+			</section>
+
+			<section class="row g-4">
+				<div class="col-12 col-xl-8">
+					<div class="glass-panel p-4 p-lg-5 h-100">
+						<div class="section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+							<div>
+								<div class="section-kicker">Detalle operativo</div>
+								<h2 class="section-title">Cuotas mensuales</h2>
+							</div>
+							<p class="section-copy mb-0" id="monthly-caption">
+								Cargando cronograma...
+							</p>
+						</div>
+						<div class="installments-grid" id="monthly-grid"></div>
+					</div>
+				</div>
+				<div class="col-12 col-xl-4">
+					<div class="glass-panel p-4 p-lg-5 mb-4">
+						<div class="section-kicker">Pago flexible</div>
+						<h2 class="section-title mb-4">Cuota extraordinaria</h2>
+						<div id="special-installment"></div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+    <footer class="text-center">
+      <p>&copy; 2026 - Lucho Web</p>
+    </footer>
+
+		<script type="module" is:inline>
+			const DATA_URL = '/api/deuda-pulsar.json';
+			const currencyFormatter = new Intl.NumberFormat('es-CO', {
+				style: 'currency',
+				currency: 'COP',
+				maximumFractionDigits: 0,
+			});
+			const longDateFormatter = new Intl.DateTimeFormat('es-CO', {
+				day: '2-digit',
+				month: 'long',
+				year: 'numeric',
+			});
+			const shortMonthFormatter = new Intl.DateTimeFormat('es-CO', {
+				month: 'short',
+				year: '2-digit',
+			});
+
+			const summaryCards = document.querySelector('#summary-cards');
+			const timelineStrip = document.querySelector('#timeline-strip');
+			const monthlyGrid = document.querySelector('#monthly-grid');
+			const specialInstallment = document.querySelector('#special-installment');
+			const monthlyCaption = document.querySelector('#monthly-caption');
+			const progressRing = document.querySelector('#progress-ring');
+			const progressValue = document.querySelector('#progress-value');
+			const salePrice = document.querySelector('#sale-price');
+			const balanceHighlight = document.querySelector('#balance-highlight');
+			const lastSync = document.querySelector('#last-sync');
+
+			function setText(element, value) {
+				if (element) {
+					element.textContent = value;
+				}
+			}
+
+			function parseLocalDate(value) {
+				if (!value) return null;
+				const [year, month, day] = value.split('-').map(Number);
+				return new Date(year, month - 1, day);
+			}
+
+			function formatCurrency(value) {
+				return currencyFormatter.format(value || 0);
+			}
+
+			function formatDate(value) {
+				const parsed = parseLocalDate(value);
+				return parsed ? longDateFormatter.format(parsed) : 'Sin fecha fija';
+			}
+
+			function formatMonth(value) {
+				const parsed = parseLocalDate(value);
+				return parsed ? shortMonthFormatter.format(parsed) : 'Flexible';
+			}
+
+			function escapeHtml(value) {
+				return String(value ?? '')
+					.replaceAll('&', '&amp;')
+					.replaceAll('<', '&lt;')
+					.replaceAll('>', '&gt;')
+					.replaceAll('"', '&quot;')
+					.replaceAll("'", '&#39;');
+			}
+
+			function getPaidAmount(installment) {
+				return installment.payments.reduce((sum, payment) => sum + (payment.amount || 0), 0);
+			}
+
+			function getStatus(installment) {
+				const totalPaid = getPaidAmount(installment);
+				if (totalPaid >= installment.amount) {
+					return 'paid';
+				}
+
+				if (installment.type === 'special') {
+					return totalPaid > 0 ? 'partial' : 'flexible';
+				}
+
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				const dueDate = parseLocalDate(installment.dueDate);
+				if (dueDate && dueDate < today) {
+					return 'overdue';
+				}
+				return totalPaid > 0 ? 'partial' : 'pending';
+			}
+
+			function getStatusLabel(status) {
+				return {
+					paid: 'Pagada',
+					partial: 'Abono parcial',
+					pending: 'Pendiente',
+					overdue: 'Vencida',
+					flexible: 'Sin fecha fija',
+				}[status];
+			}
+
+			function renderPayments(installment) {
+				if (!installment.payments.length) {
+					return '<div class="payment-empty">Sin pagos registrados.</div>';
+				}
+
+				return installment.payments
+					.map((payment) => {
+						const note = payment.note ? `<div class="payment-note">${escapeHtml(payment.note)}</div>` : '';
+						return `
+							<li class="payment-item">
+								<div>
+									<strong>${formatDate(payment.date)}</strong>
+									${note}
+								</div>
+								<span>${formatCurrency(payment.amount)}</span>
+							</li>
+						`;
+					})
+					.join('');
+			}
+
+			function renderMetricCards(loan, installments) {
+				const totalDebt = loan.salePrice;
+				const totalPaid = installments.reduce((sum, installment) => sum + getPaidAmount(installment), 0);
+				const balance = Math.max(totalDebt - totalPaid, 0);
+				const paidInstallments = installments.filter((installment) => getPaidAmount(installment) >= installment.amount).length;
+				const overdueInstallments = installments.filter((installment) => getStatus(installment) === 'overdue').length;
+				const nextDue = installments
+					.filter((installment) => installment.type === 'monthly' && getPaidAmount(installment) < installment.amount)
+					.sort((left, right) => parseLocalDate(left.dueDate) - parseLocalDate(right.dueDate))[0];
+
+				const cards = [
+					{
+						label: 'Total pagado',
+						value: formatCurrency(totalPaid),
+						meta: `${Math.round((totalPaid / totalDebt) * 100) || 0}% del negocio`,
+						icon: 'bi-wallet2',
+					},
+					{
+						label: 'Saldo pendiente',
+						value: formatCurrency(balance),
+						meta: 'Restante por cobrar',
+						icon: 'bi-piggy-bank',
+					},
+					{
+						label: 'Cuotas saldadas',
+						value: `${paidInstallments}/${installments.length}`,
+						meta: overdueInstallments ? `${overdueInstallments} vencidas hoy` : 'Sin vencidas por ahora',
+						icon: 'bi-check2-circle',
+					},
+					{
+						label: 'Próximo hito',
+						value: nextDue ? `Cuota ${nextDue.sequence}` : 'Plan completo',
+						meta: nextDue ? formatDate(nextDue.dueDate) : 'Todo está al día',
+						icon: 'bi-alarm',
+					},
+				];
+
+				summaryCards.innerHTML = cards
+					.map(
+						(card) => `
+							<div class="col-12 col-md-6 col-xl-3">
+								<div class="glass-panel metric-card p-4 h-100">
+									<div class="metric-icon"><i class="bi ${card.icon}"></i></div>
+									<div class="metric-label">${card.label}</div>
+									<div class="metric-value">${card.value}</div>
+									<div class="metric-meta">${card.meta}</div>
+								</div>
+							</div>
+						`,
+					)
+					.join('');
+
+				const progress = Math.min((totalPaid / totalDebt) * 100, 100);
+				progressRing.style.setProperty('--progress', `${progress * 3.6}deg`);
+				setText(progressValue, `${Math.round(progress)}%`);
+				setText(salePrice, formatCurrency(totalDebt));
+				setText(balanceHighlight, formatCurrency(balance));
+			}
+
+			function renderTimeline(installments) {
+				const monthlyInstallments = installments.filter((installment) => installment.type === 'monthly');
+				timelineStrip.innerHTML = monthlyInstallments
+					.map((installment) => {
+						const status = getStatus(installment);
+						return `
+							<article class="timeline-pill timeline-pill--${status}">
+								<div class="timeline-order">${installment.sequence}</div>
+								<div class="timeline-date">${formatMonth(installment.dueDate)}</div>
+							</article>
+						`;
+					})
+					.join('');
+			}
+
+			function renderInstallmentCard(installment) {
+				const status = getStatus(installment);
+				const paidAmount = getPaidAmount(installment);
+				const pendingAmount = Math.max(installment.amount - paidAmount, 0);
+				const paymentList = renderPayments(installment);
+				const note = installment.note
+					? `<p class="installment-note">${escapeHtml(installment.note)}</p>`
+					: '';
+
+				return `
+					<article class="installment-card installment-card--${status}">
+						<div class="installment-top">
+							<div>
+								<div class="installment-kicker">${escapeHtml(installment.id)}</div>
+								<h3>${escapeHtml(installment.label)}</h3>
+							</div>
+							<span class="status-pill status-pill--${status}">${getStatusLabel(status)}</span>
+						</div>
+						<div class="installment-amount">${formatCurrency(installment.amount)}</div>
+						<div class="installment-meta">
+							<span><i class="bi bi-calendar3"></i> ${formatDate(installment.dueDate)}</span>
+							<span><i class="bi bi-currency-exchange"></i> Saldo: ${formatCurrency(pendingAmount)}</span>
+						</div>
+						${note}
+						<div class="payments-box">
+							<div class="payments-head">
+								<span>Pagos cargados</span>
+								<strong>${formatCurrency(paidAmount)}</strong>
+							</div>
+							<ul class="payments-list">${paymentList}</ul>
+						</div>
+					</article>
+				`;
+			}
+
+			function renderMonthlyGrid(installments) {
+				const monthlyInstallments = installments.filter((installment) => installment.type === 'monthly');
+				const settled = monthlyInstallments.filter((installment) => getPaidAmount(installment) >= installment.amount).length;
+				setText(monthlyCaption, `${settled}/${monthlyInstallments.length} cuotas mensuales ya están cubiertas.`);
+				monthlyGrid.innerHTML = monthlyInstallments.map(renderInstallmentCard).join('');
+			}
+
+			function renderSpecialInstallment(installments) {
+				const special = installments.find((installment) => installment.type === 'special');
+				specialInstallment.innerHTML = special ? renderInstallmentCard(special) : '<p>No existe cuota extraordinaria configurada.</p>';
+			}
+
+			function renderMeta(data) {
+				setText(lastSync, `Última actualización del JSON: ${formatDate(data.updatedAt)}`);
+			}
+
+			async function loadDashboard() {
+				try {
+					const response = await fetch(DATA_URL, { cache: 'no-store' });
+					if (!response.ok) {
+						throw new Error('No se pudo leer el archivo de datos.');
+					}
+					const data = await response.json();
+					renderMetricCards(data.loan, data.installments);
+					renderTimeline(data.installments);
+					renderMonthlyGrid(data.installments);
+					renderSpecialInstallment(data.installments);
+					renderMeta(data);
+				} catch (error) {
+					const message = error instanceof Error ? error.message : 'Error desconocido';
+					summaryCards.innerHTML = `
+						<div class="col-12">
+							<div class="glass-panel p-4 error-box">
+								No fue posible cargar el JSON base. ${escapeHtml(message)}
+							</div>
+						</div>
+					`;
+					timelineStrip.innerHTML = '';
+					monthlyGrid.innerHTML = '';
+					specialInstallment.innerHTML = '<div class="error-box">Revisa la ruta /api/deuda-pulsar.json.</div>';
+					setText(lastSync, 'Última actualización: sin datos.');
+				}
+			}
+
+			loadDashboard();
+		</script>
+
+		<style is:inline>
+			:root {
+				color-scheme: dark;
+				--bg: #07111f;
+				--panel: rgba(10, 20, 38, 0.58);
+				--panel-strong: rgba(14, 28, 52, 0.78);
+				--stroke: rgba(255, 255, 255, 0.14);
+				--text: #eef5ff;
+				--muted: rgba(230, 238, 255, 0.68);
+				--accent: #8ed8ff;
+				--accent-strong: #44b6ff;
+				--success: #71f5c4;
+				--warning: #ffd27a;
+				--danger: #ff8e9b;
+				--shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				min-height: 100vh;
+				font-family: 'Manrope', sans-serif;
+				background:
+					radial-gradient(circle at top left, rgba(86, 164, 255, 0.3), transparent 28%),
+					radial-gradient(circle at 80% 15%, rgba(0, 212, 170, 0.18), transparent 20%),
+					linear-gradient(180deg, #081120 0%, #06111e 54%, #050c16 100%);
+				color: var(--text);
+				overflow-x: hidden;
+			}
+
+			.ambient {
+				position: fixed;
+				inset: auto;
+				border-radius: 999px;
+				filter: blur(30px);
+				opacity: 0.55;
+				pointer-events: none;
+			}
+
+			.ambient-a {
+				top: 4rem;
+				left: -4rem;
+				width: 16rem;
+				height: 16rem;
+				background: rgba(86, 164, 255, 0.3);
+			}
+
+			.ambient-b {
+				top: 24rem;
+				right: -3rem;
+				width: 14rem;
+				height: 14rem;
+				background: rgba(96, 255, 194, 0.18);
+			}
+
+			.ambient-c {
+				bottom: 2rem;
+				left: 40%;
+				width: 18rem;
+				height: 18rem;
+				background: rgba(255, 190, 118, 0.14);
+			}
+
+			.page-shell {
+				position: relative;
+				z-index: 1;
+			}
+
+			.glass-panel,
+			.glass-inner,
+			.installment-card,
+			.timeline-pill {
+				background: var(--panel);
+				border: 1px solid var(--stroke);
+				backdrop-filter: blur(24px);
+				-webkit-backdrop-filter: blur(24px);
+				box-shadow: var(--shadow);
+			}
+
+			.glass-panel,
+			.installment-card {
+				border-radius: 30px;
+			}
+
+			.glass-inner {
+				border-radius: 26px;
+			}
+
+			.hero-panel {
+				position: relative;
+				overflow: hidden;
+			}
+
+			.hero-panel::after {
+				content: '';
+				position: absolute;
+				inset: auto -15% -40% auto;
+				width: 20rem;
+				height: 20rem;
+				background: radial-gradient(circle, rgba(142, 216, 255, 0.18), transparent 68%);
+				pointer-events: none;
+			}
+
+			.eyebrow,
+			.section-kicker,
+			.installment-kicker,
+			.progress-caption,
+			.metric-label {
+				text-transform: uppercase;
+				letter-spacing: 0.18em;
+				font-size: 0.72rem;
+				color: var(--muted);
+			}
+
+			.hero-title,
+			.section-title,
+			.installment-card h3 {
+				font-family: 'Space Grotesk', sans-serif;
+				letter-spacing: -0.04em;
+			}
+
+			.hero-title {
+				font-size: clamp(2.6rem, 7vw, 4.9rem);
+				margin: 0.75rem 0 1rem;
+			}
+
+			.hero-copy,
+			.section-copy,
+			.howto-card p,
+			.installment-note,
+			.payment-empty,
+			.payment-note,
+			.sync-note {
+				color: var(--muted);
+				line-height: 1.7;
+			}
+
+			.hero-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.85rem;
+				margin-top: 1.75rem;
+			}
+
+			.hero-tag {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.65rem;
+				padding: 0.9rem 1.15rem;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.08);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				color: #f3f8ff;
+			}
+
+			.progress-shell {
+				display: grid;
+				gap: 1.5rem;
+				min-height: 100%;
+			}
+
+			.progress-ring {
+				width: min(16rem, 100%);
+				aspect-ratio: 1;
+				margin: 0 auto;
+				padding: 1.4rem;
+				border-radius: 50%;
+				background:
+					conic-gradient(from 220deg, var(--accent) 0deg, var(--accent-strong) var(--progress), rgba(255, 255, 255, 0.08) var(--progress), rgba(255, 255, 255, 0.08) 360deg);
+				display: grid;
+				place-items: center;
+			}
+
+			.progress-ring > div {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				background: rgba(6, 15, 28, 0.94);
+				display: grid;
+				place-items: center;
+				text-align: center;
+			}
+
+			.progress-value {
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: clamp(2rem, 4vw, 3.3rem);
+				line-height: 1;
+			}
+
+			.progress-meta {
+				display: grid;
+				gap: 1rem;
+			}
+
+			.progress-meta div {
+				padding: 1rem 1.1rem;
+				border-radius: 20px;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+			}
+
+			.progress-meta span,
+			.metric-meta {
+				display: block;
+				font-size: 0.88rem;
+				color: var(--muted);
+			}
+
+			.progress-meta strong,
+			.metric-value,
+			.installment-amount {
+				display: block;
+				margin-top: 0.4rem;
+				font-size: 1.4rem;
+				font-weight: 800;
+			}
+
+			.metric-card {
+				position: relative;
+				overflow: hidden;
+			}
+
+			.metric-icon {
+				width: 3rem;
+				height: 3rem;
+				border-radius: 18px;
+				display: grid;
+				place-items: center;
+				background: rgba(255, 255, 255, 0.08);
+				font-size: 1.2rem;
+				margin-bottom: 1rem;
+			}
+
+			.metric-value {
+				font-size: clamp(1.6rem, 3vw, 2.2rem);
+				line-height: 1.1;
+			}
+
+			.skeleton-card {
+				min-height: 12rem;
+				background:
+					linear-gradient(110deg, rgba(255, 255, 255, 0.04) 8%, rgba(255, 255, 255, 0.1) 18%, rgba(255, 255, 255, 0.04) 33%),
+					var(--panel);
+				background-size: 200% 100%;
+				animation: shimmer 2.2s linear infinite;
+			}
+
+			.section-title {
+				font-size: clamp(1.8rem, 3vw, 2.4rem);
+				margin: 0.45rem 0 0;
+			}
+
+			.timeline-strip {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+				gap: 0.85rem;
+			}
+
+			.timeline-pill {
+				padding: 1rem 0.9rem;
+				border-radius: 22px;
+				text-align: center;
+			}
+
+			.timeline-order {
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: 1.05rem;
+				margin-bottom: 0.35rem;
+			}
+
+			.timeline-date {
+				font-size: 0.82rem;
+				color: var(--muted);
+				text-transform: capitalize;
+			}
+
+			.timeline-pill--paid {
+				background:
+					linear-gradient(145deg, rgba(113, 245, 196, 0.22) 0%, rgba(113, 245, 196, 0.08) 16%, rgba(10, 20, 38, 0.58) 100%);
+				border-color: rgba(113, 245, 196, 0.35);
+			}
+
+			.installment-card--paid,
+			.status-pill--paid {
+				border-color: rgba(113, 245, 196, 0.35);
+			}
+
+			.timeline-pill--partial,
+			.installment-card--partial,
+			.status-pill--partial,
+			.installment-card--flexible,
+			.status-pill--flexible {
+				border-color: rgba(255, 210, 122, 0.35);
+			}
+
+			.timeline-pill--overdue,
+			.installment-card--overdue,
+			.status-pill--overdue {
+				border-color: rgba(255, 142, 155, 0.4);
+			}
+
+			.installments-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+				gap: 1rem;
+			}
+
+			.installment-card {
+				padding: 1.25rem;
+				display: grid;
+				gap: 1rem;
+				background: var(--panel-strong);
+			}
+
+			.installment-top,
+			.payments-head,
+			.payment-item {
+				display: flex;
+				justify-content: space-between;
+				gap: 1rem;
+			}
+
+			.installment-card h3 {
+				margin: 0.35rem 0 0;
+				font-size: 1.24rem;
+			}
+
+			.installment-meta {
+				display: grid;
+				gap: 0.45rem;
+				font-size: 0.92rem;
+				color: var(--muted);
+			}
+
+			.installment-meta i,
+			.hero-tag i {
+				color: var(--accent);
+			}
+
+			.status-pill {
+				align-self: start;
+				padding: 0.55rem 0.8rem;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.06);
+				border: 1px solid transparent;
+				font-size: 0.78rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+			}
+
+			.payments-box,
+			.howto-card {
+				padding: 1rem 1.05rem;
+				border-radius: 22px;
+				background: rgba(255, 255, 255, 0.04);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+			}
+
+			.payments-list {
+				list-style: none;
+				padding: 0;
+				margin: 0.85rem 0 0;
+				display: grid;
+				gap: 0.8rem;
+			}
+
+			.payment-item {
+				align-items: flex-start;
+				padding-top: 0.85rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+			}
+
+			.payment-item:first-child {
+				padding-top: 0;
+				border-top: 0;
+			}
+
+			.payment-item strong,
+			.payments-head strong {
+				font-size: 0.95rem;
+			}
+
+			.payment-item span {
+				white-space: nowrap;
+				font-weight: 700;
+			}
+
+			.payment-note {
+				font-size: 0.84rem;
+				margin-top: 0.2rem;
+			}
+
+			.howto-list {
+				padding-left: 1.15rem;
+				color: var(--muted);
+				display: grid;
+				gap: 0.55rem;
+			}
+
+			.howto-list span {
+				color: var(--text);
+				font-weight: 700;
+			}
+
+			.sync-note {
+				margin-top: 1rem;
+				font-size: 0.92rem;
+			}
+
+			.error-box {
+				color: #fff2f4;
+				background: rgba(124, 22, 41, 0.36);
+				border-radius: 24px;
+			}
+
+			@keyframes shimmer {
+				0% {
+					background-position: 200% 0;
+				}
+				100% {
+					background-position: -200% 0;
+				}
+			}
+
+			@media (max-width: 767.98px) {
+				.hero-tag {
+					width: 100%;
+					justify-content: center;
+				}
+
+				.installment-top,
+				.payment-item {
+					flex-direction: column;
+				}
+
+				.status-pill {
+					width: fit-content;
+				}
+			}
+		</style>
+	</body>
+</html>
