@@ -311,7 +311,7 @@
       "sequence": 30,
       "amount": 200000,
       "dueDate": "2028-11-20",
-      "note": "Ultima cuota mensual del plan numerado.",
+      "note": "",
       "payments": []
     },
     {
