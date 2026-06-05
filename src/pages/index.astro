@@ -99,7 +99,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			</section>
 
 			<section class="row g-4">
-				<div class="col-12 col-xl-8">
+				<div class="col-12">
 					<details class="glass-panel p-4 p-lg-5 h-100 collapsible-panel" id="monthly-details">
 						<summary class="collapsible-summary section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-0">
 							<div>
@@ -112,20 +112,6 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 						</summary>
 						<div class="collapsible-content mt-4">
 							<div class="installments-grid" id="monthly-grid"></div>
-						</div>
-					</details>
-				</div>
-				<div class="col-12 col-xl-4">
-					<details class="glass-panel p-4 p-lg-5 mb-4 collapsible-panel" id="special-details">
-						<summary class="collapsible-summary section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-0">
-							<div>
-								<div class="section-kicker">Pago flexible</div>
-								<h2 class="section-title">Cuota extraordinaria</h2>
-							</div>
-							<p class="section-copy mb-0">Detalle de cuota flexible.</p>
-						</summary>
-						<div class="collapsible-content mt-4">
-							<div id="special-installment"></div>
 						</div>
 					</details>
 				</div>
@@ -156,9 +142,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			const summaryCards = document.querySelector('#summary-cards');
 			const timelineStrip = document.querySelector('#timeline-strip');
 			const monthlyGrid = document.querySelector('#monthly-grid');
-			const specialInstallment = document.querySelector('#special-installment');
 			const monthlyDetails = document.querySelector('#monthly-details');
-			const specialDetails = document.querySelector('#special-details');
 			const monthlyCaption = document.querySelector('#monthly-caption');
 			const progressRing = document.querySelector('#progress-ring');
 			const progressValue = document.querySelector('#progress-value');
@@ -373,11 +357,6 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 				monthlyGrid.innerHTML = monthlyInstallments.map(renderInstallmentCard).join('');
 			}
 
-			function renderSpecialInstallment(installments) {
-				const special = installments.find((installment) => installment.type === 'special');
-				specialInstallment.innerHTML = special ? renderInstallmentCard(special) : '<p>No existe cuota extraordinaria configurada.</p>';
-			}
-
 			function renderMeta(data) {
 				setText(lastSync, `Última actualización del JSON: ${formatDate(data.updatedAt)}`);
 			}
@@ -395,9 +374,6 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 					renderMonthlyGrid(currentInstallments);
 				}
 
-				if (specialDetails?.open) {
-					renderSpecialInstallment(currentInstallments);
-				}
 			}
 
 			async function loadDashboard() {
@@ -425,7 +401,6 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 					`;
 					timelineStrip.innerHTML = '';
 					monthlyGrid.innerHTML = '';
-					specialInstallment.innerHTML = '<div class="error-box">Revisa la ruta /api/deuda-pulsar.json.</div>';
 					setText(lastSync, 'Última actualización: sin datos.');
 				}
 			}
@@ -433,12 +408,6 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			monthlyDetails?.addEventListener('toggle', () => {
 				if (monthlyDetails.open) {
 					renderMonthlyGrid(currentInstallments);
-				}
-			});
-
-			specialDetails?.addEventListener('toggle', () => {
-				if (specialDetails.open) {
-					renderSpecialInstallment(currentInstallments);
 				}
 			});
 
