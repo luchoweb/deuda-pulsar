@@ -321,7 +321,7 @@
       "sequence": null,
       "amount": 1200000,
       "dueDate": null,
-      "note": "Se paga cuando venda su moto actual. Puede ocurrir entre cualquier cuota mensual, pero no se enumera.",
+      "note": "",
       "payments": []
     }
   ]
