@@ -352,9 +352,11 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 
 			function renderMonthlyGrid(installments) {
 				const monthlyInstallments = installments.filter((installment) => installment.type === 'monthly');
+				const specialInstallment = installments.find((installment) => installment.type === 'special');
+				const detailedInstallments = specialInstallment ? [specialInstallment, ...monthlyInstallments] : monthlyInstallments;
 				const settled = monthlyInstallments.filter((installment) => getPaidAmount(installment) >= installment.amount).length;
 				setText(monthlyCaption, `${settled}/${monthlyInstallments.length} cuotas mensuales ya están cubiertas.`);
-				monthlyGrid.innerHTML = monthlyInstallments.map(renderInstallmentCard).join('');
+				monthlyGrid.innerHTML = detailedInstallments.map(renderInstallmentCard).join('');
 			}
 
 			function renderMeta(data) {
