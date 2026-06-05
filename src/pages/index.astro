@@ -45,7 +45,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 							vigilar el saldo y revisar el estado de cada cuota desde cualquier dispositivo.
 						</p>
 						<div class="hero-tags">
-							<span class="hero-tag"><i class="bi bi-calendar-event"></i> Inicio mensual: 05 de julio de 2026</span>
+							<span class="hero-tag" id="monthly-start-tag"><i class="bi bi-calendar-event"></i> Inicio mensual: Cargando...</span>
 							<span class="hero-tag"><i class="bi bi-cash-stack"></i> 30 cuotas de $200.000</span>
 							<span class="hero-tag"><i class="bi bi-stars"></i> Cuota extra: $1.200.000</span>
 						</div>
@@ -165,6 +165,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			const salePrice = document.querySelector('#sale-price');
 			const balanceHighlight = document.querySelector('#balance-highlight');
 			const lastSync = document.querySelector('#last-sync');
+			const monthlyStartTag = document.querySelector('#monthly-start-tag');
 			let currentInstallments = [];
 
 			function setText(element, value) {
@@ -381,6 +382,14 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 				setText(lastSync, `Última actualización del JSON: ${formatDate(data.updatedAt)}`);
 			}
 
+			function renderHero(data) {
+				const firstMonthlyInstallment = data.installments
+					.filter((installment) => installment.type === 'monthly' && installment.dueDate)
+					.sort((left, right) => parseLocalDate(left.dueDate) - parseLocalDate(right.dueDate))[0];
+				const startDate = firstMonthlyInstallment?.dueDate || `${data.loan.scheduleStartMonth}-${String(data.loan.scheduleStartsOnDay).padStart(2, '0')}`;
+				setText(monthlyStartTag, `Inicio mensual: ${formatDate(startDate)}`);
+			}
+
 			function renderExpandedSections() {
 				if (monthlyDetails?.open) {
 					renderMonthlyGrid(currentInstallments);
@@ -399,6 +408,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 					}
 					const data = await response.json();
 					currentInstallments = data.installments;
+					renderHero(data);
 					renderMetricCards(data.loan, data.installments);
 					renderTimeline(data.installments);
 					renderExpandedSections();
@@ -906,6 +916,13 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 
 				.status-pill {
 					width: fit-content;
+				}
+			}
+
+			@media (min-width: 992px) {
+				.collapsible-summary::after {
+					margin-left: auto;
+					align-self: flex-end;
 				}
 			}
 		</style>
