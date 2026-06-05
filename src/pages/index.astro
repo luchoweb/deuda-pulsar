@@ -100,25 +100,34 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 
 			<section class="row g-4">
 				<div class="col-12 col-xl-8">
-					<div class="glass-panel p-4 p-lg-5 h-100">
-						<div class="section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+					<details class="glass-panel p-4 p-lg-5 h-100 collapsible-panel" id="monthly-details">
+						<summary class="collapsible-summary section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-0">
 							<div>
 								<div class="section-kicker">Detalle operativo</div>
 								<h2 class="section-title">Cuotas mensuales</h2>
 							</div>
 							<p class="section-copy mb-0" id="monthly-caption">
-								Cargando cronograma...
+								Cronograma mensual.
 							</p>
+						</summary>
+						<div class="collapsible-content mt-4">
+							<div class="installments-grid" id="monthly-grid"></div>
 						</div>
-						<div class="installments-grid" id="monthly-grid"></div>
-					</div>
+					</details>
 				</div>
 				<div class="col-12 col-xl-4">
-					<div class="glass-panel p-4 p-lg-5 mb-4">
-						<div class="section-kicker">Pago flexible</div>
-						<h2 class="section-title mb-4">Cuota extraordinaria</h2>
-						<div id="special-installment"></div>
-					</div>
+					<details class="glass-panel p-4 p-lg-5 mb-4 collapsible-panel" id="special-details">
+						<summary class="collapsible-summary section-head d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-0">
+							<div>
+								<div class="section-kicker">Pago flexible</div>
+								<h2 class="section-title">Cuota extraordinaria</h2>
+							</div>
+							<p class="section-copy mb-0">Detalle de cuota flexible.</p>
+						</summary>
+						<div class="collapsible-content mt-4">
+							<div id="special-installment"></div>
+						</div>
+					</details>
 				</div>
 			</section>
 		</main>
@@ -148,12 +157,15 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			const timelineStrip = document.querySelector('#timeline-strip');
 			const monthlyGrid = document.querySelector('#monthly-grid');
 			const specialInstallment = document.querySelector('#special-installment');
+			const monthlyDetails = document.querySelector('#monthly-details');
+			const specialDetails = document.querySelector('#special-details');
 			const monthlyCaption = document.querySelector('#monthly-caption');
 			const progressRing = document.querySelector('#progress-ring');
 			const progressValue = document.querySelector('#progress-value');
 			const salePrice = document.querySelector('#sale-price');
 			const balanceHighlight = document.querySelector('#balance-highlight');
 			const lastSync = document.querySelector('#last-sync');
+			let currentInstallments = [];
 
 			function setText(element, value) {
 				if (element) {
@@ -369,6 +381,16 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 				setText(lastSync, `Última actualización del JSON: ${formatDate(data.updatedAt)}`);
 			}
 
+			function renderExpandedSections() {
+				if (monthlyDetails?.open) {
+					renderMonthlyGrid(currentInstallments);
+				}
+
+				if (specialDetails?.open) {
+					renderSpecialInstallment(currentInstallments);
+				}
+			}
+
 			async function loadDashboard() {
 				try {
 					const response = await fetch(DATA_URL, { cache: 'no-store' });
@@ -376,13 +398,14 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 						throw new Error('No se pudo leer el archivo de datos.');
 					}
 					const data = await response.json();
+					currentInstallments = data.installments;
 					renderMetricCards(data.loan, data.installments);
 					renderTimeline(data.installments);
-					renderMonthlyGrid(data.installments);
-					renderSpecialInstallment(data.installments);
+					renderExpandedSections();
 					renderMeta(data);
 				} catch (error) {
 					const message = error instanceof Error ? error.message : 'Error desconocido';
+					currentInstallments = [];
 					summaryCards.innerHTML = `
 						<div class="col-12">
 							<div class="glass-panel p-4 error-box">
@@ -396,6 +419,18 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 					setText(lastSync, 'Última actualización: sin datos.');
 				}
 			}
+
+			monthlyDetails?.addEventListener('toggle', () => {
+				if (monthlyDetails.open) {
+					renderMonthlyGrid(currentInstallments);
+				}
+			});
+
+			specialDetails?.addEventListener('toggle', () => {
+				if (specialDetails.open) {
+					renderSpecialInstallment(currentInstallments);
+				}
+			});
 
 			loadDashboard();
 		</script>
@@ -653,6 +688,36 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 			.section-title {
 				font-size: clamp(1.8rem, 3vw, 2.4rem);
 				margin: 0.45rem 0 0;
+			}
+
+			.collapsible-panel {
+				border-radius: 24px;
+			}
+
+			.collapsible-summary {
+				list-style: none;
+				cursor: pointer;
+			}
+
+			.collapsible-summary::-webkit-details-marker {
+				display: none;
+			}
+
+			.collapsible-summary::after {
+				content: 'Mostrar';
+				align-self: center;
+				padding: 0.35rem 0.7rem;
+				border-radius: 999px;
+				font-size: 0.72rem;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				background: rgba(255, 255, 255, 0.07);
+				border: 1px solid rgba(255, 255, 255, 0.16);
+			}
+
+			.collapsible-panel[open] .collapsible-summary::after {
+				content: 'Ocultar';
 			}
 
 			.timeline-strip {
