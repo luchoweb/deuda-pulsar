@@ -22,11 +22,11 @@
       "amount": 200000,
       "dueDate": "2026-06-20",
       "note": "",
-      "payments": {
+      "payments": [{
         "date": "2026-06-20",
         "amount": 200000,
         "note": "Bre-B Bancolombia"
-      }
+      }]
     },
     {
       "id": "M02",
