@@ -36,7 +36,11 @@
       "amount": 200000,
       "dueDate": "2026-07-20",
       "note": "",
-      "payments": []
+      "payments": [{
+        "date": "2026-07-17",
+        "amount": 200000,
+        "note": "Bre-B Nu"
+      }]
     },
     {
       "id": "M03",
@@ -326,7 +330,11 @@
       "amount": 1200000,
       "dueDate": null,
       "note": "",
-      "payments": []
+      "payments": [{
+        "date": "2026-07-17",
+        "amount": 1200000,
+        "note": "Bre-B Nu"
+      }]
     }
   ]
 }
