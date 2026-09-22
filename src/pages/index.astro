@@ -124,9 +124,9 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 				currency: 'COP',
 				maximumFractionDigits: 0,
 			});
-			const longDateFormatter = new Intl.DateTimeFormat('es-CO', {
+			const shortDateFormatter = new Intl.DateTimeFormat('es-CO', {
 				day: '2-digit',
-				month: 'long',
+				month: 'short',
 				year: 'numeric',
 			});
 			const shortMonthFormatter = new Intl.DateTimeFormat('es-CO', {
@@ -163,7 +163,7 @@ const pageDescription = 'Control de la deuda - Pulsar NS 125 UG 2026.';
 
 			function formatDate(value) {
 				const parsed = parseLocalDate(value);
-				return parsed ? longDateFormatter.format(parsed) : 'Sin fecha fija';
+				return parsed ? shortDateFormatter.format(parsed) : 'Sin fecha fija';
 			}
 
 			function formatMonth(value) {
