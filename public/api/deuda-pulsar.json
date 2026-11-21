@@ -92,7 +92,11 @@
       "amount": 200000,
       "dueDate": "2026-11-20",
       "note": "",
-      "payments": []
+      "payments": [{
+        "date": "2026-11-20",
+        "amount": 200000,
+        "note": "Bancolombia"
+      }]
     },
     {
       "id": "M07",
